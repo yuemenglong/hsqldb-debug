@@ -1,0 +1,12 @@
+.idea/
+bin/
+build/
+doc-src/
+doc/
+index.html
+integration/
+out/
+readme.txt
+sample/
+stylesheets/
+testrun/
