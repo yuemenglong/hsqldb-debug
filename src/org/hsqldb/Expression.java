@@ -56,6 +56,9 @@ import org.hsqldb.types.RowType;
 import org.hsqldb.types.Type;
 import org.hsqldb.types.Types;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 /**
  * Expression class.
  *
@@ -65,6 +68,15 @@ import org.hsqldb.types.Types;
  * @since 1.9.0
  */
 public class Expression implements Cloneable {
+
+    public String toString(){
+        String content = Arrays.stream(nodes).map(Expression::toString).collect(Collectors.joining(", "));
+        return String.format("%s %d [ %s ]",
+                this.getClass().getSimpleName(),
+                opType,
+                content
+        );
+    }
 
     public static final int LEFT    = 0;
     public static final int RIGHT   = 1;

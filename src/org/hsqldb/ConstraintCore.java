@@ -49,6 +49,11 @@ import org.hsqldb.index.Index;
  */
 class ConstraintCore {
 
+    public String toString(){
+        return String.format("%s, %s, %s, %s, %s",
+                refName, mainName, uniqueName, refTableName, mainTableName);
+    }
+
     // refName and mainName are for foreign keys only
     HsqlName refName;
     HsqlName mainName;

@@ -31,6 +31,9 @@
 
 package org.hsqldb;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 /**
  * @author Fred Toussi (fredt@users dot sourceforge.net)
  * @version 2.5.0
@@ -48,6 +51,10 @@ public interface RangeGroup {
     boolean isVariable();
 
     class RangeGroupSimple implements RangeGroup {
+
+        public String toString(){
+            return Arrays.stream(ranges).map(String::valueOf).collect(Collectors.joining(", "));
+        }
 
         final RangeVariable[] ranges;
         final RangeGroup      baseGroup;
