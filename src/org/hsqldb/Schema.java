@@ -51,6 +51,10 @@ import org.hsqldb.rights.Grantee;
 */
 public final class Schema implements SchemaObject {
 
+    public String toString(){
+        return String.valueOf(name);
+    }
+
     private HsqlName name;
     SchemaObjectSet  triggerLookup;
     SchemaObjectSet  constraintLookup;

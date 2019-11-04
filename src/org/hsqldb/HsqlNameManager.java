@@ -327,6 +327,10 @@ public final class HsqlNameManager {
 
     public static class SimpleName {
 
+        public String toString(){
+            return String.valueOf(name);
+        }
+
         public String  name;
         public boolean isNameQuoted;
 
@@ -558,11 +562,12 @@ public final class HsqlNameManager {
         }
 
         public String toString() {
-
-            return getClass().getName() + super.hashCode()
-                   + "[this.hashCode()=" + this.hashCode + ", name=" + name
-                   + ", name.hashCode()=" + name.hashCode()
-                   + ", isNameQuoted=" + isNameQuoted + "]";
+            return String.valueOf(name);
+//            return String.format("[%s] ", name)
+//                   + getClass().getName() + super.hashCode()
+//                   + "[this.hashCode()=" + this.hashCode + ", name=" + name
+//                   + ", name.hashCode()=" + name.hashCode()
+//                   + ", isNameQuoted=" + isNameQuoted + "]";
         }
 
         /**

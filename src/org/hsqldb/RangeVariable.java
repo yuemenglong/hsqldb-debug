@@ -72,6 +72,10 @@ public class RangeVariable {
     //
     private static final RowIterator emptyIterator = new RangeIteratorEmpty();
 
+    public String toString(){
+        return String.valueOf(tableAlias);
+    }
+
     //
     Table                  rangeTable;
     final SimpleName       tableAlias;

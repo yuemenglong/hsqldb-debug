@@ -62,6 +62,10 @@ public class StatementSchema extends Statement {
     boolean  isSchemaDefinition;
     Token[]  statementTokens;
 
+    public String toString(){
+        return String.valueOf(sql);
+    }
+
     StatementSchema(int type, int group) {
 
         super(type, group);

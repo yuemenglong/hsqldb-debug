@@ -55,6 +55,18 @@ import org.hsqldb.types.Type;
  */
 public final class Constraint implements SchemaObject {
 
+    public String toString(){
+        String[] array = new String[]{
+                "FOREIGN_KEY",
+                "MAIN",
+                "UNIQUE",
+                "CHECK",
+                "PRIMARY_KEY",
+                "TEMP"
+        };
+        return String.format("%s, %s", name, array[constType]);
+    }
+
     ConstraintCore   core;
     private HsqlName name;
     int              constType;
