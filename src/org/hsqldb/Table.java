@@ -69,6 +69,10 @@ import org.hsqldb.types.Type;
  */
 public class Table extends TableBase implements SchemaObject {
 
+    public String toString(){
+        return SchemaObject.toString(this);
+    }
+
     public static final Table[] emptyArray = new Table[]{};
 
     // main properties

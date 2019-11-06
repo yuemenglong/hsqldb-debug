@@ -56,7 +56,7 @@ import org.hsqldb.types.Type;
 public final class Constraint implements SchemaObject {
 
     public String toString(){
-        String[] array = new String[]{
+        String[] typeArray = new String[]{
                 "FOREIGN_KEY",
                 "MAIN",
                 "UNIQUE",
@@ -64,7 +64,17 @@ public final class Constraint implements SchemaObject {
                 "PRIMARY_KEY",
                 "TEMP"
         };
-        return String.format("%s, %s", name, array[constType]);
+        String[] addonArray = new String[]{
+                "",
+                "",
+                "",
+                String.valueOf(check),
+                "",
+                ""
+        };
+        String type = typeArray[constType];
+        String addon = addonArray[constType];
+        return String.format("%s: %s, %s", type, name, addon);
     }
 
     ConstraintCore   core;

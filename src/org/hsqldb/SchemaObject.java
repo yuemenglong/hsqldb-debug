@@ -76,6 +76,80 @@ public interface SchemaObject {
     int REFERENCE        = 29;
     int PERIOD           = 30;
 
+    static String toString(SchemaObject so) {
+        String ts = SchemaObject.typeString(so.getType());
+        return String.format("%s: %s", ts, so.getName());
+    }
+
+    static String typeString(int type) {
+        switch (type) {
+            case SchemaObject.DATABASE:
+                return "DATABASE";
+            case SchemaObject.CATALOG:
+                return "CATALOG";
+            case SchemaObject.SCHEMA:
+                return "SCHEMA";
+            case SchemaObject.TABLE:
+                return "TABLE";
+            case SchemaObject.VIEW:
+                return "VIEW";
+            case SchemaObject.CONSTRAINT:
+                return "CONSTRAINT";
+            case SchemaObject.ASSERTION:
+                return "ASSERTION";
+            case SchemaObject.SEQUENCE:
+                return "SEQUENCE";
+            case SchemaObject.TRIGGER:
+                return "TRIGGER";
+            case SchemaObject.COLUMN:
+                return "COLUMN";
+            case SchemaObject.TRANSITION:
+                return "TRANSITION";
+            case SchemaObject.GRANTEE:
+                return "GRANTEE";
+            case SchemaObject.TYPE:
+                return "TYPE";
+            case SchemaObject.DOMAIN:
+                return "DOMAIN";
+            case SchemaObject.CHARSET:
+                return "CHARSET";
+            case SchemaObject.COLLATION:
+                return "COLLATION";
+            case SchemaObject.FUNCTION:
+                return "FUNCTION";
+            case SchemaObject.PROCEDURE:
+                return "PROCEDURE";
+            case SchemaObject.ROUTINE:
+                return "ROUTINE";
+            case SchemaObject.CURSOR:
+                return "CURSOR";
+            case SchemaObject.INDEX:
+                return "INDEX";
+            case SchemaObject.LABEL:
+                return "LABEL";
+            case SchemaObject.VARIABLE:
+                return "VARIABLE";
+            case SchemaObject.PARAMETER:
+                return "PARAMETER";
+            case SchemaObject.SPECIFIC_ROUTINE:
+                return "SPECIFIC_ROUTINE";
+            case SchemaObject.WRAPPER:
+                return "WRAPPER";
+            case SchemaObject.SERVER:
+                return "SERVER";
+            case SchemaObject.SUBQUERY:
+                return "SUBQUERY";
+            case SchemaObject.SEARCH:
+                return "SEARCH";
+            case SchemaObject.REFERENCE:
+                return "REFERENCE";
+            case SchemaObject.PERIOD:
+                return "PERIOD";
+            default:
+                return "ERROR!";
+        }
+    }
+
     //
     SchemaObject[] emptyArray = new SchemaObject[]{};
 

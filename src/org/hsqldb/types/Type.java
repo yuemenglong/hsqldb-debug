@@ -53,6 +53,10 @@ import org.hsqldb.rights.Grantee;
  */
 public abstract class Type implements SchemaObject, Cloneable {
 
+    public String toString(){
+        return getNameString();
+    }
+
     public static final Type[] emptyArray = new Type[]{};
 
     //

@@ -50,6 +50,10 @@ import org.hsqldb.types.Types;
  */
 public class ColumnSchema extends ColumnBase implements SchemaObject {
 
+    public String toString() {
+        return SchemaObject.toString(this);
+    }
+
     public static final ColumnSchema[] emptyArray = new ColumnSchema[]{};
 
     //

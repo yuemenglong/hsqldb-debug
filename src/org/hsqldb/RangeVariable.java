@@ -72,8 +72,25 @@ public class RangeVariable {
     //
     private static final RowIterator emptyIterator = new RangeIteratorEmpty();
 
+    public String getTypeString() {
+        switch (rangeType) {
+            case RangeVariable.TABLE_RANGE:
+                return "TABLE_RANGE";
+            case RangeVariable.TRANSITION_RANGE:
+                return "TRANSITION_RANGE";
+            case RangeVariable.PARAMETER_RANGE:
+                return "PARAMETER_RANGE";
+            case RangeVariable.VARIALBE_RANGE:
+                return "VARIALBE_RANGE";
+            case RangeVariable.PLACEHOLDER_RANGE:
+                return "PLACEHOLDER_RANGE";
+            default:
+                return "ERROR!";
+        }
+    }
+
     public String toString(){
-        return String.valueOf(tableAlias);
+        return getTypeString();
     }
 
     //

@@ -69,12 +69,215 @@ import java.util.stream.Collectors;
  */
 public class Expression implements Cloneable {
 
+    public static String opTypeString(int opType) {
+        switch (opType) {
+            case OpTypes.NONE:
+                return "NONE";
+            case OpTypes.VALUE:
+                return "VALUE";
+            case OpTypes.COLUMN:
+                return "COLUMN";
+            case OpTypes.COALESCE:
+                return "COALESCE";
+            case OpTypes.DEFAULT:
+                return "DEFAULT";
+            case OpTypes.SIMPLE_COLUMN:
+                return "SIMPLE_COLUMN";
+            case OpTypes.VARIABLE:
+                return "VARIABLE";
+            case OpTypes.PARAMETER:
+                return "PARAMETER";
+            case OpTypes.DYNAMIC_PARAM:
+                return "DYNAMIC_PARAM";
+            case OpTypes.TRANSITION_VARIABLE:
+                return "TRANSITION_VARIABLE";
+            case OpTypes.DIAGNOSTICS_VARIABLE:
+                return "DIAGNOSTICS_VARIABLE";
+            case OpTypes.ASTERISK:
+                return "ASTERISK";
+            case OpTypes.SEQUENCE:
+                return "SEQUENCE";
+            case OpTypes.SEQUENCE_CURRENT:
+                return "SEQUENCE_CURRENT";
+            case OpTypes.ROWNUM:
+                return "ROWNUM";
+            case OpTypes.ARRAY:
+                return "ARRAY";
+            case OpTypes.MULTISET:
+                return "MULTISET";
+            case OpTypes.SCALAR_SUBQUERY:
+                return "SCALAR_SUBQUERY";
+            case OpTypes.ROW_SUBQUERY:
+                return "ROW_SUBQUERY";
+            case OpTypes.TABLE_SUBQUERY:
+                return "TABLE_SUBQUERY";
+            case OpTypes.RECURSIVE_SUBQUERY:
+                return "RECURSIVE_SUBQUERY";
+            case OpTypes.ROW:
+                return "ROW";
+            case OpTypes.VALUELIST:
+                return "VALUELIST";
+            case OpTypes.FUNCTION:
+                return "FUNCTION";
+            case OpTypes.SQL_FUNCTION:
+                return "SQL_FUNCTION";
+            case OpTypes.STATE_FUNCTION:
+                return "STATE_FUNCTION";
+            case OpTypes.TABLE:
+                return "TABLE";
+            case OpTypes.NEGATE:
+                return "NEGATE";
+            case OpTypes.ADD:
+                return "ADD";
+            case OpTypes.SUBTRACT:
+                return "SUBTRACT";
+            case OpTypes.MULTIPLY:
+                return "MULTIPLY";
+            case OpTypes.DIVIDE:
+                return "DIVIDE";
+            case OpTypes.CONCAT:
+                return "CONCAT";
+            case OpTypes.LIKE_ARG:
+                return "LIKE_ARG";
+            case OpTypes.CASEWHEN_COALESCE:
+                return "CASEWHEN_COALESCE";
+            case OpTypes.IS_NOT_NULL:
+                return "IS_NOT_NULL";
+            case OpTypes.EQUAL:
+                return "EQUAL";
+            case OpTypes.GREATER_EQUAL:
+                return "GREATER_EQUAL";
+            case OpTypes.GREATER_EQUAL_PRE:
+                return "GREATER_EQUAL_PRE";
+            case OpTypes.GREATER:
+                return "GREATER";
+            case OpTypes.SMALLER:
+                return "SMALLER";
+            case OpTypes.SMALLER_EQUAL:
+                return "SMALLER_EQUAL";
+            case OpTypes.NOT_EQUAL:
+                return "NOT_EQUAL";
+            case OpTypes.IS_NULL:
+                return "IS_NULL";
+            case OpTypes.NOT:
+                return "NOT";
+            case OpTypes.AND:
+                return "AND";
+            case OpTypes.OR:
+                return "OR";
+            case OpTypes.ALL_QUANTIFIED:
+                return "ALL_QUANTIFIED";
+            case OpTypes.ANY_QUANTIFIED:
+                return "ANY_QUANTIFIED";
+            case OpTypes.LIKE:
+                return "LIKE";
+            case OpTypes.IN:
+                return "IN";
+            case OpTypes.EXISTS:
+                return "EXISTS";
+            case OpTypes.OVERLAPS:
+                return "OVERLAPS";
+            case OpTypes.PERIOD:
+                return "PERIOD";
+            case OpTypes.PERIOD_CHECK:
+                return "PERIOD_CHECK";
+            case OpTypes.RANGE_CONTAINS:
+                return "RANGE_CONTAINS";
+            case OpTypes.RANGE_EQUALS:
+                return "RANGE_EQUALS";
+            case OpTypes.RANGE_OVERLAPS:
+                return "RANGE_OVERLAPS";
+            case OpTypes.RANGE_PRECEDES:
+                return "RANGE_PRECEDES";
+            case OpTypes.RANGE_SUCCEEDS:
+                return "RANGE_SUCCEEDS";
+            case OpTypes.RANGE_IMMEDIATELY_PRECEDES:
+                return "RANGE_IMMEDIATELY_PRECEDES";
+            case OpTypes.RANGE_IMMEDIATELY_SUCCEEDS:
+                return "RANGE_IMMEDIATELY_SUCCEEDS";
+            case OpTypes.UNIQUE:
+                return "UNIQUE";
+            case OpTypes.NOT_DISTINCT:
+                return "NOT_DISTINCT";
+            case OpTypes.MATCH_SIMPLE:
+                return "MATCH_SIMPLE";
+            case OpTypes.MATCH_PARTIAL:
+                return "MATCH_PARTIAL";
+            case OpTypes.MATCH_FULL:
+                return "MATCH_FULL";
+            case OpTypes.MATCH_UNIQUE_SIMPLE:
+                return "MATCH_UNIQUE_SIMPLE";
+            case OpTypes.MATCH_UNIQUE_PARTIAL:
+                return "MATCH_UNIQUE_PARTIAL";
+            case OpTypes.MATCH_UNIQUE_FULL:
+                return "MATCH_UNIQUE_FULL";
+            case OpTypes.COUNT:
+                return "COUNT";
+            case OpTypes.SUM:
+                return "SUM";
+            case OpTypes.MIN:
+                return "MIN";
+            case OpTypes.MAX:
+                return "MAX";
+            case OpTypes.AVG:
+                return "AVG";
+            case OpTypes.EVERY:
+                return "EVERY";
+            case OpTypes.SOME:
+                return "SOME";
+            case OpTypes.STDDEV_POP:
+                return "STDDEV_POP";
+            case OpTypes.STDDEV_SAMP:
+                return "STDDEV_SAMP";
+            case OpTypes.VAR_POP:
+                return "VAR_POP";
+            case OpTypes.VAR_SAMP:
+                return "VAR_SAMP";
+            case OpTypes.ARRAY_AGG:
+                return "ARRAY_AGG";
+            case OpTypes.GROUP_CONCAT:
+                return "GROUP_CONCAT";
+            case OpTypes.PREFIX:
+                return "PREFIX";
+            case OpTypes.MEDIAN:
+                return "MEDIAN";
+            case OpTypes.CONCAT_WS:
+                return "CONCAT_WS";
+            case OpTypes.CAST:
+                return "CAST";
+            case OpTypes.ZONE_MODIFIER:
+                return "ZONE_MODIFIER";
+            case OpTypes.CASEWHEN:
+                return "CASEWHEN";
+            case OpTypes.ORDER_BY:
+                return "ORDER_BY";
+            case OpTypes.LIMIT:
+                return "LIMIT";
+            case OpTypes.ALTERNATIVE:
+                return "ALTERNATIVE";
+            case OpTypes.MULTICOLUMN:
+                return "MULTICOLUMN";
+            case OpTypes.USER_AGGREGATE:
+                return "USER_AGGREGATE";
+            case OpTypes.ARRAY_ACCESS:
+                return "ARRAY_ACCESS";
+            case OpTypes.ARRAY_SUBQUERY:
+                return "ARRAY_SUBQUERY";
+            case OpTypes.GROUPING:
+                return "GROUPING";
+            default:
+                return "ERROR!";
+        }
+    }
+
+    public String contentToString(){
+        return Arrays.stream(nodes).map(Expression::toString).collect(Collectors.joining(", "));
+    }
+
     public String toString(){
-        String content = Arrays.stream(nodes).map(Expression::toString).collect(Collectors.joining(", "));
-        return String.format("%s %d [ %s ]",
-                this.getClass().getSimpleName(),
-                opType,
-                content
+        return String.format("%s [ %s ]",
+                opTypeString(opType),
+                contentToString()
         );
     }
 

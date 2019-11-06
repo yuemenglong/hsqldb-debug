@@ -55,6 +55,11 @@ import org.hsqldb.types.Type;
  */
 public class ExpressionColumn extends Expression {
 
+    @Override
+    public String contentToString() {
+        return String.valueOf(column);
+    }
+
     public static final ExpressionColumn[] emptyArray =
         new ExpressionColumn[]{};
     static final SimpleName rownumName =
