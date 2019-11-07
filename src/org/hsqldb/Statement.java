@@ -49,6 +49,10 @@ import org.hsqldb.result.ResultProperties;
  */
 public abstract class Statement {
 
+    public String toString(){
+        return String.valueOf(sql);
+    }
+
     static final int META_RESET_VIEWS      = 1;
     static final int META_RESET_STATEMENTS = 2;
 

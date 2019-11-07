@@ -270,14 +270,14 @@ public class Expression implements Cloneable {
         }
     }
 
-    public String contentToString(){
+    public String toString0(){
         return Arrays.stream(nodes).map(Expression::toString).collect(Collectors.joining(", "));
     }
 
     public String toString(){
         return String.format("%s [ %s ]",
                 opTypeString(opType),
-                contentToString()
+                toString0()
         );
     }
 

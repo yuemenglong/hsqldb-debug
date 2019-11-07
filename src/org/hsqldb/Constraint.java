@@ -45,6 +45,9 @@ import org.hsqldb.result.Result;
 import org.hsqldb.rights.Grantee;
 import org.hsqldb.types.Type;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 /**
  * Implementation of a table constraint with references to the indexes used
  * by the constraint.<p>
@@ -69,7 +72,7 @@ public final class Constraint implements SchemaObject {
                 "",
                 "",
                 String.valueOf(check),
-                "",
+                "MainCol:" + Arrays.stream(core.mainCols).mapToObj(String::valueOf).collect(Collectors.joining(", ")),
                 ""
         };
         String type = typeArray[constType];

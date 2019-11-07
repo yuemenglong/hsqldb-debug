@@ -56,7 +56,7 @@ import org.hsqldb.types.Type;
 public class ExpressionColumn extends Expression {
 
     @Override
-    public String contentToString() {
+    public String toString0() {
         return String.valueOf(column);
     }
 

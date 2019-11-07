@@ -45,6 +45,10 @@ import org.hsqldb.types.Type;
  */
 public class ExpressionValue extends Expression {
 
+    public String toString0(){
+        return String.valueOf(valueData);
+    }
+
     /**
      * Creates a VALUE expression
      */
