@@ -116,6 +116,10 @@ import org.hsqldb.types.Type;
  */
 public class IndexAVL implements Index {
 
+    public String toString(){
+        return String.format("IndexName: %s, %s", name, table);
+    }
+
     private static final IndexRowIterator emptyIterator =
         new IndexRowIterator(null, null, null, null, 0, false, false);
 

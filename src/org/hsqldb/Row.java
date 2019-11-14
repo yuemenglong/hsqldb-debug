@@ -39,6 +39,8 @@ import org.hsqldb.rowio.RowOutputInterface;
 import org.hsqldb.types.DateTimeType;
 import org.hsqldb.types.TimestampData;
 
+import java.util.Arrays;
+
 /**
  * Base class for a database row object.
  *
@@ -46,6 +48,10 @@ import org.hsqldb.types.TimestampData;
  * @version 2.5.0
  */
 public class Row implements CachedObject {
+
+    public String toString() {
+        return String.format("%s, Row: %s", table, Arrays.stream(rowData).map(Object::toString).reduce((a, b) -> a + "," + b).orElse(""));
+    }
 
     long                      position;
     Object[]                  rowData;
