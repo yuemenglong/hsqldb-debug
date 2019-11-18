@@ -102,6 +102,10 @@ import org.hsqldb.rowio.RowInputInterface;
  */
 public class NodeAVL implements CachedObject {
 
+    public String toString(){
+        return String.format("Node %s", row);
+    }
+
     static final int NO_POS = RowAVLDisk.NO_POS;
     public int       iBalance;
     public NodeAVL   nNext;    // node of next index (nNext==null || nNext.iId=iId+1)
@@ -114,10 +118,6 @@ public class NodeAVL implements CachedObject {
 
     NodeAVL() {
         row = null;
-    }
-
-    public String toString() {
-        return String.valueOf(row);
     }
 
     public NodeAVL(Row r) {

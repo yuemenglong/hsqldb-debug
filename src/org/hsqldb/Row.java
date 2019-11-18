@@ -49,6 +49,10 @@ import java.util.Arrays;
  */
 public class Row implements CachedObject {
 
+    public String toString() {
+        return String.format("%s, Row: %s", table, Arrays.stream(rowData).map(Object::toString).reduce((a, b) -> a + "," + b).orElse(""));
+    }
+
     long                      position;
     Object[]                  rowData;
     public volatile RowAction rowAction;
@@ -64,10 +68,6 @@ public class Row implements CachedObject {
     public Row(TableBase table, Object[] data) {
         this.table   = table;
         this.rowData = data;
-    }
-
-    public String toString() {
-        return String.format("%s, %s", table, Arrays.stream(rowData).map(String::valueOf).reduce((s, s2) -> s + "," + s2).orElse(""));
     }
 
     public Object getField(int col) {

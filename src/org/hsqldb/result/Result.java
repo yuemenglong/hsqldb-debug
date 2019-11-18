@@ -74,10 +74,6 @@ import org.hsqldb.types.Type;
  */
 public class Result {
 
-    public String toString(){
-        return String.valueOf(mainString);
-    }
-
     public static final Result[]       emptyArray = new Result[0];
     public static final ResultMetaData sessionAttributesMetaData;
 

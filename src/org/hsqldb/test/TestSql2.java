@@ -62,7 +62,16 @@ public class TestSql2 extends TestBase {
     public void test0() throws SQLException {
         stmnt.execute("drop table test if exists");
         stmnt.execute("create table test(id int primary key, value varchar(32))");
-        stmnt.execute("insert into test values(1, 'abc')");
+        try {
+            connection.setAutoCommit(false);
+            stmnt.execute("insert into test values(1, 'a')");
+            stmnt.execute("insert into test values(2, 'b')");
+            stmnt.execute("insert into test values(3, 'c')");
+            stmnt.executeQuery("select * from test where id > 1");
+            connection.commit();
+        } catch (Exception e) {
+            connection.rollback();
+        }
 //        stmnt.execute(
 //                "CREATE TABLE T (I IDENTITY, A CHAR(20), B CHAR(20));");
 //        stmnt.execute(
