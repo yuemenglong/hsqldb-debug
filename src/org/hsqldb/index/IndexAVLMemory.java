@@ -75,6 +75,8 @@ import org.hsqldb.TableBase;
 import org.hsqldb.persist.PersistentStore;
 import org.hsqldb.types.Type;
 
+import java.util.Arrays;
+
 /**
  * Implementation of an AVL for memory tables.<p>
  *
@@ -110,6 +112,10 @@ public class IndexAVLMemory extends IndexAVL {
                           boolean forward) {
         super(name, id, table, columns, descending, nullsLast, colTypes, pk,
               unique, constraint, forward);
+    }
+
+    public String toString() {
+        return String.format("%s, %s, Cols: %s", name, table, Arrays.stream(getColumns()).mapToObj(String::valueOf).reduce((s, s2) -> s + "," + s2).orElse(""));
     }
 
     void delete(PersistentStore store, NodeAVL x) {

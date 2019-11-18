@@ -116,6 +116,10 @@ public class NodeAVL implements CachedObject {
         row = null;
     }
 
+    public String toString() {
+        return String.valueOf(row);
+    }
+
     public NodeAVL(Row r) {
         row = r;
     }

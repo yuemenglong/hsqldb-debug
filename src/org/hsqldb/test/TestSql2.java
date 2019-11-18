@@ -62,7 +62,7 @@ public class TestSql2 extends TestBase {
     public void test0() throws SQLException {
         stmnt.execute("drop table test if exists");
         stmnt.execute("create table test(id int primary key, value varchar(32))");
-        stmnt.execute("insert into test values(null, 'abc')");
+        stmnt.execute("insert into test values(1, 'abc')");
 //        stmnt.execute(
 //                "CREATE TABLE T (I IDENTITY, A CHAR(20), B CHAR(20));");
 //        stmnt.execute(
