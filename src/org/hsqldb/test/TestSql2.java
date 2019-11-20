@@ -67,7 +67,9 @@ public class TestSql2 extends TestBase {
             stmnt.execute("insert into test values(1, 'a')");
             stmnt.execute("insert into test values(2, 'b')");
             stmnt.execute("insert into test values(3, 'c')");
-            stmnt.executeQuery("select * from test where id > 1");
+            stmnt.execute("insert into test values(4, 'd')");
+            stmnt.execute("insert into test values(5, 'e')");
+            stmnt.executeQuery("select * from test where id > 1 and id < 4");
             connection.commit();
         } catch (Exception e) {
             connection.rollback();

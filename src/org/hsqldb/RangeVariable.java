@@ -60,18 +60,6 @@ import org.hsqldb.types.Type;
  */
 public class RangeVariable {
 
-    static final RangeVariable[] emptyArray = new RangeVariable[]{};
-
-    //
-    public static final int TABLE_RANGE       = 1;
-    public static final int TRANSITION_RANGE  = 2;
-    public static final int PARAMETER_RANGE   = 3;
-    public static final int VARIALBE_RANGE    = 4;
-    public static final int PLACEHOLDER_RANGE = 5;
-
-    //
-    private static final RowIterator emptyIterator = new RangeIteratorEmpty();
-
     public String getTypeString() {
         switch (rangeType) {
             case RangeVariable.TABLE_RANGE:
@@ -92,6 +80,18 @@ public class RangeVariable {
     public String toString(){
         return getTypeString();
     }
+
+    static final RangeVariable[] emptyArray = new RangeVariable[]{};
+
+    //
+    public static final int TABLE_RANGE       = 1;
+    public static final int TRANSITION_RANGE  = 2;
+    public static final int PARAMETER_RANGE   = 3;
+    public static final int VARIALBE_RANGE    = 4;
+    public static final int PLACEHOLDER_RANGE = 5;
+
+    //
+    private static final RowIterator emptyIterator = new RangeIteratorEmpty();
 
     //
     Table                  rangeTable;
