@@ -31,8 +31,9 @@
 
 package org.hsqldb.test;
 
-import junit.framework.TestCase;
-import junit.framework.TestResult;
+import org.hsqldb.Database;
+import org.hsqldb.server.Server;
+import org.hsqldb.server.WebServer;
 
 import java.sql.*;
 
@@ -41,73 +42,113 @@ import java.sql.*;
  *
  * @author Fred Toussi (fredt@users dot sourceforge.net)
  */
-@SuppressWarnings("SqlDialectInspection")
-public class TestSql2 extends TestBase {
+@SuppressWarnings({"SqlDialectInspection", "FieldCanBeLocal", "unused"})
+public class TestSql2 {
 
-    Statement stmnt;
-    Connection connection;
+    private static String dbPath = "mem:test;sql.enforce_strict_size=true;sql.restrict_exec=true;hsqldb.tx=mvcc";
+    private static String serverProps;
+    private static String url;
+    private static String user = "sa";
+    private static String password = "";
+    private static Server server;
+    private static boolean isNetwork = true;
+    private static boolean isHTTP = false;    // Set false to test HSQL protocol, true to test HTTP, in which case you can use isUseTestServlet to target either HSQL's webserver, or the Servlet server-mode
+    private static boolean isServlet = false;
 
-    public TestSql2(String name) {
-        super(name);
+    interface TxHandler {
+        void handle(Statement stmt) throws Exception;
     }
 
-    protected void setUp() throws Exception {
+    private static void doTx(TxHandler tx) throws SQLException {
+        Connection conn = newConnection();
+        Statement stmt = conn.createStatement();
+        try {
+            conn.setAutoCommit(false);
+            tx.handle(stmt);
+            conn.commit();
+        } catch (Exception e) {
+            conn.rollback();
+        }
+    }
 
-        super.setUp();
-        connection = super.newConnection();
-        stmnt = connection.createStatement();
+    @SuppressWarnings("Duplicates")
+    static protected void setUp() {
+        if (isNetwork) {
+            //  change the url to reflect your preferred db location and name
+            if (url == null) {
+                if (isServlet) {
+                    url = "jdbc:hsqldb:http://localhost:8080/HSQLwebApp/test";
+                } else if (isHTTP) {
+                    url = "jdbc:hsqldb:http://localhost:8085/test";
+                } else {
+                    url = "jdbc:hsqldb:hsql://localhost/test";
+                }
+            }
+            if (!isServlet) {
+                server = isHTTP ? new WebServer()
+                        : new Server();
+                if (isHTTP) {
+                    server.setPort(8085);
+                }
+                server.setDatabaseName(0, "test");
+                server.setDatabasePath(0, dbPath);
+                server.setLogWriter(null);
+                server.setErrWriter(null);
+                server.start();
+            }
+        } else {
+            if (url == null) {
+                url = "jdbc:hsqldb:" + dbPath;
+            }
+        }
+        try {
+            Class.forName("org.hsqldb.jdbc.JDBCDriver");
+            Connection conn = newConnection();
+            Statement stmt = conn.createStatement();
+            stmt.execute("drop table test if exists");
+            stmt.execute("create table test(id int primary key, value varchar(32))");
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println(".setUp() error: " + e.getMessage());
+        }
+    }
+
+    static void tearDown() {
+
+        if (isNetwork && !isServlet) {
+            server.shutdownWithCatalogs(Database.CLOSEMODE_IMMEDIATELY);
+
+            server = null;
+        }
+    }
+
+    static Connection newConnection() throws SQLException {
+        return DriverManager.getConnection(url, user, password);
+    }
+
+    private static void select() throws SQLException {
+        doTx(stmt -> {
+            ResultSet res = stmt.executeQuery("select * from test");
+            System.out.println(res.next());
+        });
+    }
+
+    private static void insert(int i) throws SQLException {
+        doTx(stmt -> {
+            stmt.execute(String.format("insert into test values(%d, '%s')", i, 'a' - 1 + i));
+        });
     }
 
     @SuppressWarnings("SqlNoDataSourceInspection")
-    public void test0() throws SQLException {
-        stmnt.execute("drop table test if exists");
-        stmnt.execute("create table test(id int primary key, value varchar(32))");
-        try {
-            connection.setAutoCommit(false);
-            stmnt.execute("insert into test values(1, 'a')");
-            stmnt.execute("insert into test values(2, 'b')");
-            stmnt.execute("insert into test values(3, 'c')");
-            stmnt.execute("insert into test values(4, 'd')");
-            stmnt.execute("insert into test values(5, 'e')");
-            stmnt.executeQuery("select * from test where id > 1 and id < 4");
-            connection.commit();
-        } catch (Exception e) {
-            connection.rollback();
-        }
-//        stmnt.execute(
-//                "CREATE TABLE T (I IDENTITY, A CHAR(20), B CHAR(20));");
-//        stmnt.execute(
-//                "INSERT INTO T VALUES (NULL, 'get_column_name', '"
-//                        + getColumnName + "');");
-//
-//        ResultSet rs = stmnt.executeQuery(
-//                "SELECT I, A, B, A \"aliasA\", B \"aliasB\", 1 FROM T;");
-//        ResultSetMetaData rsmd = rs.getMetaData();
-//
-//        result5 = "";
-//
-//        for (; rs.next(); ) {
-//            for (int i = 0; i < rsmd.getColumnCount(); i++) {
-//                result5 += rsmd.getColumnName(i + 1) + ":"
-//                        + rs.getString(i + 1) + ":";
-//            }
-//
-//            result5 += "\n";
-//        }
-//
-//        rs.close();
+    public static void main(String[] args) throws Exception {
+        setUp();
+        doTx(stmt -> {
+            stmt.execute("insert into test values(1, 'a')");
+            doTx(stmt1 -> {
+                stmt1.execute("insert into test values(2, 'b')");
+                select();
+            });
+        });
+        tearDown();
     }
-
-//    public static void main(String[] argv) {
-//
-//        TestResult result = new TestResult();
-//        TestCase testA = new TestSql2("testMetaData");
-//        TestCase testB = new TestSql2("testDoubleNaN");
-//        TestCase testC = new TestSql2("testAny");
-//
-//        testA.run(result);
-//        testB.run(result);
-//        testC.run(result);
-//        System.out.println("TestSql error count: " + result.failureCount());
-//    }
 }

@@ -1915,6 +1915,10 @@ public class IndexAVL implements Index {
 
     public static final class IndexRowIterator implements RowIterator {
 
+        public String toString(){
+            return String.format("LastRow: %s, NextNode: %s", lastrow, nextnode);
+        }
+
         final Session         session;
         final PersistentStore store;
         final IndexAVL        index;
