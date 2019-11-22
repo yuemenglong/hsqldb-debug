@@ -117,7 +117,8 @@ import org.hsqldb.types.Type;
 public class IndexAVL implements Index {
 
     public String toString(){
-        return String.format("IndexName: %s, %s", name, table);
+        return String.format("%s, %s, Name: %s",
+                name, table, name);
     }
 
     private static final IndexRowIterator emptyIterator =

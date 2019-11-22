@@ -115,7 +115,13 @@ public class IndexAVLMemory extends IndexAVL {
     }
 
     public String toString() {
-        return String.format("%s, %s, Cols: %s", name, table, Arrays.stream(getColumns()).mapToObj(String::valueOf).reduce((s, s2) -> s + "," + s2).orElse(""));
+        return String.format("%s, Cols: %s, %s",
+                table,
+                Arrays.stream(getColumns())
+                        .mapToObj(String::valueOf)
+                        .reduce((s, s2) -> s + "," + s2)
+                        .orElse(""),
+                name);
     }
 
     void delete(PersistentStore store, NodeAVL x) {
