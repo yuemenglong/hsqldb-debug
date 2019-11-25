@@ -59,15 +59,21 @@ public class TestSql2 {
         void handle(Statement stmt) throws Exception;
     }
 
-    private static void doTx(TxHandler tx) throws SQLException {
-        Connection conn = newConnection();
-        Statement stmt = conn.createStatement();
+    private static void doTx(TxHandler tx) {
         try {
-            conn.setAutoCommit(false);
-            tx.handle(stmt);
-            conn.commit();
+            Connection conn = newConnection();
+            conn.setTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
+            Statement stmt = conn.createStatement();
+            try {
+                conn.setAutoCommit(false);
+                tx.handle(stmt);
+                conn.commit();
+            } catch (Exception e) {
+                conn.rollback();
+                e.printStackTrace();
+            }
         } catch (Exception e) {
-            conn.rollback();
+            e.printStackTrace();
         }
     }
 
@@ -103,10 +109,12 @@ public class TestSql2 {
         }
         try {
             Class.forName("org.hsqldb.jdbc.JDBCDriver");
-            Connection conn = newConnection();
-            Statement stmt = conn.createStatement();
-            stmt.execute("drop table test if exists");
-            stmt.execute("create table test(id int primary key, value varchar(32))");
+            doTx(stmt -> {
+                stmt.execute("drop table if exists t1");
+                stmt.execute("drop table if exists t2");
+                stmt.execute("create table t1(id int primary key, value varchar(32))");
+                stmt.execute("create table t2(id int primary key, value varchar(32))");
+            });
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println(".setUp() error: " + e.getMessage());
@@ -114,10 +122,8 @@ public class TestSql2 {
     }
 
     static void tearDown() {
-
         if (isNetwork && !isServlet) {
             server.shutdownWithCatalogs(Database.CLOSEMODE_IMMEDIATELY);
-
             server = null;
         }
     }
@@ -139,16 +145,47 @@ public class TestSql2 {
         });
     }
 
+    private static void print(ResultSet rs) {
+        try {
+            while (rs.next()) {
+                StringBuffer sb = new StringBuffer();
+                for (int i = 0; i < rs.getMetaData().getColumnCount(); i++) {
+                    sb.append(rs.getObject(i + 1).toString());
+                    sb.append(",");
+                }
+                System.out.println(sb.toString());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     @SuppressWarnings("SqlNoDataSourceInspection")
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws InterruptedException {
         setUp();
         doTx(stmt -> {
-            stmt.execute("insert into test values(1, 'a')");
-            doTx(stmt1 -> {
-                stmt1.execute("insert into test values(2, 'b')");
-                select();
+            stmt.execute("insert into t1 values(1, 'a')");
+        });
+        Thread t = new Thread(() -> {
+            doTx(stmt -> {
+                stmt.execute("update t1 set value='b' where id=1");
+                Thread.sleep(100);
+                System.out.println("update");
             });
         });
+        t.start();
+        doTx(stmt1 -> {
+            {
+                ResultSet rs = stmt1.executeQuery("select * from t1 where id=1");
+                print(rs);
+            }
+            Thread.sleep(500);
+            {
+                ResultSet rs = stmt1.executeQuery("select * from t1 where id=1");
+                print(rs);
+            }
+        });
+        t.join();
         tearDown();
     }
 }

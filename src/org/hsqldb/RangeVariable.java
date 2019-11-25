@@ -1259,6 +1259,11 @@ public class RangeVariable {
 
     public static class RangeIteratorMain extends RangeIteratorBase {
 
+        @Override
+        public String toString() {
+            return String.valueOf(this.it);
+        }
+
         boolean                   hasLeftOuterRow;
         boolean                   isFullIterator;
         RangeVariableConditions[] conditions;
