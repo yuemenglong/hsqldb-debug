@@ -1176,6 +1176,11 @@ public class RangeVariable {
 
     public static class RangeIteratorBase implements RangeIterator {
 
+        @Override
+        public String toString() {
+            return String.valueOf(this.it);
+        }
+
         Session         session;
         int             rangePosition;
         RowIterator     it = emptyIterator;
@@ -1258,11 +1263,6 @@ public class RangeVariable {
     }
 
     public static class RangeIteratorMain extends RangeIteratorBase {
-
-        @Override
-        public String toString() {
-            return String.valueOf(this.it);
-        }
 
         boolean                   hasLeftOuterRow;
         boolean                   isFullIterator;
@@ -1785,6 +1785,11 @@ public class RangeVariable {
     }
 
     static final class RangeIteratorEmpty implements RowIterator {
+
+        @Override
+        public String toString() {
+            return "Empty Iterator";
+        }
 
         public Object getField(int col) {
             return null;

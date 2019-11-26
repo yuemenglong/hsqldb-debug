@@ -49,6 +49,30 @@ package org.hsqldb;
  */
 public class RowActionBase {
 
+    @Override
+    public String toString() {
+        switch (type){
+            case ACTION_NONE:
+                return "ACTION_NONE";
+            case ACTION_INSERT:
+                return "ACTION_INSERT";
+            case ACTION_DELETE:
+                return "ACTION_DELETE";
+            case ACTION_DELETE_FINAL:
+                return "ACTION_DELETE_FINAL";
+            case ACTION_INSERT_DELETE:
+                return "ACTION_INSERT_DELETE";
+            case ACTION_REF:
+                return "ACTION_REF";
+            case ACTION_CHECK:
+                return "ACTION_CHECK";
+            case ACTION_DEBUG:
+                return "ACTION_DEBUG";
+            default:
+                return "ERROR!!";
+        }
+    }
+
     public static final byte ACTION_NONE          = 0;
     public static final byte ACTION_INSERT        = 1;
     public static final byte ACTION_DELETE        = 2;

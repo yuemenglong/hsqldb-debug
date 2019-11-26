@@ -32,10 +32,12 @@
 package org.hsqldb.test;
 
 import org.hsqldb.Database;
+import org.hsqldb.index.IndexAVL;
 import org.hsqldb.server.Server;
 import org.hsqldb.server.WebServer;
 
 import java.sql.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Test sql statements via jdbc against in-memory database
@@ -44,6 +46,13 @@ import java.sql.*;
  */
 @SuppressWarnings({"SqlDialectInspection", "FieldCanBeLocal", "unused"})
 public class TestSql2 {
+
+    public static void registIndex(IndexAVL index) {
+        indexs.putIfAbsent(index.getName().toString(), index);
+        System.out.println("Regist " + index);
+    }
+
+    private static ConcurrentHashMap<String, IndexAVL> indexs = new ConcurrentHashMap<>();
 
     private static String dbPath = "mem:test;sql.enforce_strict_size=true;sql.restrict_exec=true;hsqldb.tx=mvcc";
     private static String serverProps;
@@ -122,6 +131,7 @@ public class TestSql2 {
     }
 
     static void tearDown() {
+        indexs.clear();
         if (isNetwork && !isServlet) {
             server.shutdownWithCatalogs(Database.CLOSEMODE_IMMEDIATELY);
             server = null;
@@ -165,27 +175,31 @@ public class TestSql2 {
         setUp();
         doTx(stmt -> {
             stmt.execute("insert into t1 values(1, 'a')");
+            stmt.executeQuery("select * from t1");
         });
-        Thread t = new Thread(() -> {
-            doTx(stmt -> {
-                stmt.execute("update t1 set value='b' where id=1");
-                Thread.sleep(100);
-                System.out.println("update");
-            });
-        });
-        t.start();
-        doTx(stmt1 -> {
-            {
-                ResultSet rs = stmt1.executeQuery("select * from t1 where id=1");
-                print(rs);
-            }
-            Thread.sleep(500);
-            {
-                ResultSet rs = stmt1.executeQuery("select * from t1 where id=1");
-                print(rs);
-            }
-        });
-        t.join();
+//        doTx(stmt -> {
+//            stmt.execute("insert into t1 values(1, 'a')");
+//        });
+//        Thread t = new Thread(() -> {
+//            doTx(stmt -> {
+//                stmt.execute("update t1 set value='b' where id=1");
+//                Thread.sleep(100);
+//                System.out.println("update");
+//            });
+//        });
+//        t.start();
+//        doTx(stmt1 -> {
+//            {
+//                ResultSet rs = stmt1.executeQuery("select * from t1 where id=1");
+//                print(rs);
+//            }
+//            Thread.sleep(500);
+//            {
+//                ResultSet rs = stmt1.executeQuery("select * from t1 where id=1");
+//                print(rs);
+//            }
+//        });
+//        t.join();
         tearDown();
     }
 }

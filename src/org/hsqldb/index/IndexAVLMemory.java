@@ -115,13 +115,13 @@ public class IndexAVLMemory extends IndexAVL {
     }
 
     public String toString() {
-        return String.format("%s, Cols: %s, %s",
-                table,
+        return String.format("%s, Cols: %s",
+                super.toString(),
                 Arrays.stream(getColumns())
                         .mapToObj(String::valueOf)
                         .reduce((s, s2) -> s + "," + s2)
-                        .orElse(""),
-                name);
+                        .orElse("")
+        );
     }
 
     void delete(PersistentStore store, NodeAVL x) {
