@@ -50,7 +50,10 @@ import java.util.Arrays;
 public class Row implements CachedObject {
 
     public String toString() {
-        return String.format("%s(%s)", table, Arrays.stream(rowData).map(Object::toString).reduce((a, b) -> a + "," + b).orElse(""));
+        return String.format("%s(%s,%s)",
+                table,
+                Arrays.stream(rowData).map(Object::toString).reduce((a, b) -> a + "," + b).orElse(""),
+                rowAction);
     }
 
     long                      position;

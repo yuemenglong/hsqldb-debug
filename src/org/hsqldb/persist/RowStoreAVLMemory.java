@@ -66,7 +66,6 @@ public class RowStoreAVLMemory extends RowStoreAVL {
         lock              = new ReentrantReadWriteLock();
         readLock          = lock.readLock();
         writeLock         = lock.writeLock();
-        System.out.println(String.format("%s MemoryStore", table));
         if (table.toString().endsWith("T1")) {
             TestSql2.t1Store = this;
         }

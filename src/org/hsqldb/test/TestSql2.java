@@ -187,33 +187,33 @@ public class TestSql2 {
     @SuppressWarnings("SqlNoDataSourceInspection")
     public static void main(String[] args) throws InterruptedException {
         setUp();
-        doTx(stmt -> {
-            stmt.execute("insert into t1 values(1, 'a')");
-            stmt.executeQuery("select * from t1");
-        });
 //        doTx(stmt -> {
 //            stmt.execute("insert into t1 values(1, 'a')");
+//            stmt.executeQuery("select * from t1");
 //        });
-//        Thread t = new Thread(() -> {
-//            doTx(stmt -> {
-//                stmt.execute("update t1 set value='b' where id=1");
-//                Thread.sleep(100);
-//                System.out.println("update");
-//            });
-//        });
-//        t.start();
-//        doTx(stmt1 -> {
-//            {
-//                ResultSet rs = stmt1.executeQuery("select * from t1 where id=1");
-//                print(rs);
-//            }
-//            Thread.sleep(500);
-//            {
-//                ResultSet rs = stmt1.executeQuery("select * from t1 where id=1");
-//                print(rs);
-//            }
-//        });
-//        t.join();
+        doTx(stmt -> {
+            stmt.execute("insert into t1 values(1, 'a')");
+        });
+        Thread t = new Thread(() -> {
+            doTx(stmt -> {
+                stmt.execute("update t1 set value='b' where id=1");
+                Thread.sleep(100);
+                System.out.println("update");
+            });
+        });
+        t.start();
+        doTx(stmt1 -> {
+            {
+                ResultSet rs = stmt1.executeQuery("select * from t1 where id=1");
+                print(rs);
+            }
+            Thread.sleep(500);
+            {
+                ResultSet rs = stmt1.executeQuery("select * from t1 where id=1");
+                print(rs);
+            }
+        });
+        t.join();
         tearDown();
     }
 }
