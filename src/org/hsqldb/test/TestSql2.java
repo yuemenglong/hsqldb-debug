@@ -33,11 +33,15 @@ package org.hsqldb.test;
 
 import org.hsqldb.Database;
 import org.hsqldb.index.IndexAVL;
+import org.hsqldb.navigator.RowIterator;
+import org.hsqldb.persist.RowStoreAVLMemory;
 import org.hsqldb.server.Server;
 import org.hsqldb.server.WebServer;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 /**
  * Test sql statements via jdbc against in-memory database
@@ -47,10 +51,8 @@ import java.util.concurrent.ConcurrentHashMap;
 @SuppressWarnings({"SqlDialectInspection", "FieldCanBeLocal", "unused"})
 public class TestSql2 {
 
-    public static void registIndex(IndexAVL index) {
-        indexs.putIfAbsent(index.getName().toString(), index);
-        System.out.println("Regist " + index);
-    }
+    public static RowStoreAVLMemory t1Store;
+    public static IndexAVL t1Index;
 
     private static ConcurrentHashMap<String, IndexAVL> indexs = new ConcurrentHashMap<>();
 
@@ -63,6 +65,18 @@ public class TestSql2 {
     private static boolean isNetwork = true;
     private static boolean isHTTP = false;    // Set false to test HSQL protocol, true to test HTTP, in which case you can use isUseTestServlet to target either HSQL's webserver, or the Servlet server-mode
     private static boolean isServlet = false;
+
+    public static String t1Iter() {
+        if (t1Store == null || t1Index == null) {
+            return null;
+        }
+        ArrayList<String> rows = new ArrayList<>();
+        RowIterator iter = t1Index.firstRow(t1Store);
+        while (iter.next()) {
+            rows.add(iter.getCurrentRow().toString());
+        }
+        return String.join(",", rows);
+    }
 
     interface TxHandler {
         void handle(Statement stmt) throws Exception;

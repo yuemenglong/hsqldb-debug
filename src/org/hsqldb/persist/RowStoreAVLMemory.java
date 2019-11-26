@@ -44,6 +44,7 @@ import org.hsqldb.error.Error;
 import org.hsqldb.error.ErrorCode;
 import org.hsqldb.lib.ArrayUtil;
 import org.hsqldb.rowio.RowInputInterface;
+import org.hsqldb.test.TestSql2;
 
 /*
  * Implementation of PersistentStore for MEMORY tables.
@@ -65,6 +66,10 @@ public class RowStoreAVLMemory extends RowStoreAVL {
         lock              = new ReentrantReadWriteLock();
         readLock          = lock.readLock();
         writeLock         = lock.writeLock();
+        System.out.println(String.format("%s MemoryStore", table));
+        if (table.toString().endsWith("T1")) {
+            TestSql2.t1Store = this;
+        }
     }
 
     public boolean isMemory() {

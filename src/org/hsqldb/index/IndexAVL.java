@@ -89,6 +89,7 @@ import org.hsqldb.lib.OrderedHashSet;
 import org.hsqldb.navigator.RowIterator;
 import org.hsqldb.persist.PersistentStore;
 import org.hsqldb.rights.Grantee;
+import org.hsqldb.test.TestSql2;
 import org.hsqldb.types.DateTimeType;
 import org.hsqldb.types.TimestampData;
 import org.hsqldb.types.Type;
@@ -117,7 +118,7 @@ import org.hsqldb.types.Type;
 public class IndexAVL implements Index {
 
     public String toString(){
-        return String.format("Name: %s, %s",
+        return String.format("%s, %s",
                 name, table);
     }
 
@@ -201,6 +202,9 @@ public class IndexAVL implements Index {
         isSimpleOrder = simpleOrder;
         isSimple      = isSimpleOrder && colIndex.length == 1;
         nullData      = new Object[colIndex.length];
+        if (table.toString().endsWith("T1")) {
+            TestSql2.t1Index = this;
+        }
     }
 
     // SchemaObject implementation

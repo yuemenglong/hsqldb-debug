@@ -70,7 +70,7 @@ import org.hsqldb.types.Type;
 public class Table extends TableBase implements SchemaObject {
 
     public String toString(){
-        return SchemaObject.toString(this);
+        return tableName.toString();
     }
 
     public static final Table[] emptyArray = new Table[]{};
